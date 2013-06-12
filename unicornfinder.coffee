@@ -5,7 +5,7 @@ allSkills = -> Skills.find()
 allUnicorns = -> Unicorns.find()
 
 if Meteor.isClient
-  Template.hello.username = Template.unicorn.username = -> Meteor.user()?.profile?.name
+  Template.hello.username = Template.unicorn.username = username = -> Meteor.user()?.profile?.name
 
   Template.unicorn.mySkills = ->
     skills = []
@@ -19,7 +19,7 @@ if Meteor.isClient
 
   getUnicornId = ->
     Unicorns.find(Meteor.userId()).fetch()?._id or
-    Unicorns.insert {_id: Meteor.userId(), name: name()}
+    Unicorns.insert {_id: Meteor.userId(), name: username()}
 
   Template.unicorn.events
     'click #skillAdd': (ev, template) ->
