@@ -7,5 +7,4 @@ autopublish
 preserve-inputs
 coffeescript
 accounts-meetup
-handlebars
-insecure
+accounts-ui

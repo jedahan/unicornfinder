@@ -3,23 +3,55 @@
 </head>
 
 <body>
-  {{> hello}}
-  {{> skills}}
+  <div id="outer">
+    {{loginButtons}}
+    {{> hello}}
+    {{> unicorn}}
+    {{> allSkills}}
+    {{> allUnicorns}}
+  </div>
 </body>
 
 <template name="hello">
-  {{greeting}}
+  <h1>
+    {{#if username}}
+      Hello {{username}}
+    {{else}}
+      Welcome to unicorn finder
+    {{/if}}
+  </h1>
+</template>
+
+<template name="unicorn">
+  {{#if username}}
+    {{> skills}}
+  {{/if}}
 </template>
 
 <template name="skills">
-  <h3>Add skill:</h3>
   <form>
-    <input type="text" id="skillText"></input>
+    <input type="text" id="skillText" placeholder="writing,c++"></input>
     <input type="button" id="skillAdd" value="add skill"></input>
   </form>
   <ul>
+    {{#each mySkills}}
+    <li>{{name}}</li>
+    {{/each}}
+  </ul>
+</template>
+
+<template name="allSkills">
+  <ul>
     {{#each allSkills}}
-    <li>{{skill}}</li>
+    <li>{{name}}</li>
+    {{/each}}
+  </ul>
+</template>
+
+<template name="allUnicorns">
+  <ul>
+    {{#each allUnicorns}}
+    <li>{{name}}</li>
     {{/each}}
   </ul>
 </template>

@@ -1,16 +1,49 @@
-Skills = new Meteor.Collection "skills"
+@Unicorns = new Meteor.Collection "unicorns"
+@Skills = new Meteor.Collection "skills"
+
+allSkills = -> Skills.find()
+allUnicorns = -> Unicorns.find()
 
 if Meteor.isClient
-  Template.hello.greeting = ->
-    if Session.get('username')
-      "Hello #{Session.get('username')}"
-    else
-      "Welcome to unicorn finder"
+  Template.hello.username = Template.unicorn.username = -> Meteor.user()?.profile?.name
 
-  Template.skills.allSkills = ->
-    Skills.find()
+  Template.unicorn.mySkills = ->
+    skills = []
+    for skillId in Unicorns.find(Meteor.userId()).fetch().skills
+      skills.push Skills.find(skillId).name
+    skills
 
-  Template.skills.events
+  getAttributeId = (attr, name) ->
+    attr.find({name}).fetch()?._id or
+    attr.insert {name, unicornIds: [Meteor.userId()]}
+
+  getUnicornId = ->
+    Unicorns.find(Meteor.userId()).fetch()?._id or
+    Unicorns.insert {_id: Meteor.userId(), name: name()}
+
+  Template.unicorn.events
     'click #skillAdd': (ev, template) ->
-      skill = template.find('#skillText').value
-      Skills.insert {skill}
+      unicornId = getUnicornId()
+      skillId = getAttributeId Skills, template.find('#skillText').value
+      
+      Unicorns.update unicornId, {$addToSet: {skillIds: skillId}}
+      Skills.update skillId, {$addToSet: {unicornIds: unicornId}}
+
+if Meteor.isServer
+  Meteor.startup ->
+    Unicorns.remove {}
+    Skills.remove {}
+
+  onlyId = (id, doc) -> doc.unicornIds is [id]
+  addId = (id, doc, fields, modifier) -> modifier is {$addToSet: {unicornIds: id}}
+  Skills.allow
+    insert: onlyId
+    update: addId
+    remove: onlyId
+
+  # You can only update your own unicorn row
+  sameId = (id, doc) -> doc._id is id
+  Unicorns.allow
+    insert: sameId
+    update: sameId
+    remove: sameId
