@@ -3,10 +3,23 @@
 </head>
 
 <body>
-  {{> login}}
+  {{> hello}}
+  {{> skills}}
 </body>
 
-<template name="login">
-  {{userId}}
-  <input type="button" value="Login" />
+<template name="hello">
+  {{greeting}}
+</template>
+
+<template name="skills">
+  <h3>Add skill:</h3>
+  <form>
+    <input type="text" id="skillText"></input>
+    <input type="button" id="skillAdd" value="add skill"></input>
+  </form>
+  <ul>
+    {{#each allSkills}}
+    <li>{{skill}}</li>
+    {{/each}}
+  </ul>
 </template>
