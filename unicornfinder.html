@@ -6,8 +6,10 @@
   <div id="outer">
     {{loginButtons}}
     {{> hello}}
-    {{> unicorn}}
+    {{> skills}}
+    <h2>All skills</h2>
     {{> allSkills}}
+    <h2>All unicorns</h2>
     {{> allUnicorns}}
   </div>
 </body>
@@ -20,12 +22,6 @@
       Welcome to unicorn finder
     {{/if}}
   </h1>
-</template>
-
-<template name="unicorn">
-  {{#if username}}
-    {{> skills}}
-  {{/if}}
 </template>
 
 <template name="skills">

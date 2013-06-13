@@ -5,44 +5,47 @@ allSkills = -> Skills.find()
 allUnicorns = -> Unicorns.find()
 
 if Meteor.isClient
-  Template.hello.username = Template.unicorn.username = username = -> Meteor.user()?.profile?.name
+  Template.hello.username = username = -> Meteor.user()?.profile?.name
 
-  Template.unicorn.mySkills = ->
-    skills = []
-    for skillId in Unicorns.find(Meteor.userId()).fetch().skills
-      skills.push Skills.find(skillId).name
+  Template.allSkills.allSkills = ->
+    ({name: skill.name} for skill in Skills.find().fetch())
+
+  Template.skills.mySkills = ->
+    skillIds = Unicorns.findOne(Meteor.userId())?.skillIds
+    if skillIds? then skills = ({name: Skills.findOne(skillId).name} for skillId in skillIds)
     skills
 
   getUnicornId = ->
-    Unicorns.find(Meteor.userId()).fetch()?._id or
-    Unicorns.insert {_id: Meteor.userId(), name: username()}
+    Unicorns.findOne(Meteor.userId())?._id or Unicorns.insert {_id: Meteor.userId(), name: username()}
 
   getSkillId = (name) ->
-    Skills.find({name}).fetch()?._id or
-    Skills.insert {name, unicornIds: [Meteor.userId()]}
+    if id = Skills.find({name}).fetch()?._id
+      id
+    else
+      Skills.insert {name, unicornIds: [Meteor.userId()]}
 
-  Template.unicorn.events
+  Template.skills.events
     'click #skillAdd': (ev, template) ->
-      #unicornId = getUnicornId()
+      unicornId = getUnicornId()
       skillId = getSkillId template.find('#skillText').value
       
-      #Unicorns.update unicornId, {$addToSet: {skillIds: skillId}}
-      #Skills.update skillId, {$addToSet: {unicornIds: unicornId}}
+      Unicorns.update unicornId, {$addToSet: {skillIds: skillId}}
+      Skills.update skillId, {$addToSet: {unicornIds: unicornId}}
 
 if Meteor.isServer
   Meteor.startup ->
     Unicorns.remove {}
     Skills.remove {}
 
-  onlyId = (id, doc) -> doc.unicornIds is [id]
-  addId = (id, doc, fields, modifier) -> modifier is {$addToSet: {unicornIds: id}}
+  onlyId = (userId, doc) -> doc.unicornIds.length is 1 and doc.unicornIds[0] is userId
+  addId = (userId, doc, fields, modifier) -> true or modifier is {$addToSet: {unicornIds: userId}}
   Skills.allow
     insert: onlyId
     update: addId
     remove: onlyId
 
   # You can only update your own unicorn row
-  sameId = (id, doc) -> doc._id is id
+  sameId = (userId, doc) -> doc._id is userId
   Unicorns.allow
     insert: sameId
     update: sameId
