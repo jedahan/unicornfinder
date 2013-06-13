@@ -1,8 +1,6 @@
 @Unicorns = new Meteor.Collection "unicorns"
 @Skills = new Meteor.Collection "skills"
 
-allSkills = -> Skills.find()
-allUnicorns = -> Unicorns.find()
 username = -> Meteor.user()?.profile?.name
 
 if Meteor.isClient
