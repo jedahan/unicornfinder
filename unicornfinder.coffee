@@ -19,10 +19,7 @@ if Meteor.isClient
     Unicorns.findOne(Meteor.userId())?._id or Unicorns.insert {_id: Meteor.userId(), name: username()}
 
   getSkillId = (name) ->
-    if id = Skills.find({name}).fetch()?._id
-      id
-    else
-      Skills.insert {name, unicornIds: [Meteor.userId()]}
+    Skills.findOne({name})?._id or Skills.insert {name, unicornIds: [Meteor.userId()]}
 
   Template.skills.events
     'click #skillAdd': (ev, template) ->
