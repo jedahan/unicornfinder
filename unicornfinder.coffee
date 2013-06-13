@@ -10,6 +10,9 @@ if Meteor.isClient
   Template.allSkills.allSkills = ->
     ({name: skill.name} for skill in Skills.find().fetch())
 
+  Template.allUnicorns.allUnicorns = ->
+    ({name: unicorn.name} for unicorn in Unicorns.find().fetch())
+
   Template.skills.mySkills = ->
     skillIds = Unicorns.findOne(Meteor.userId())?.skillIds
     if skillIds? then skills = ({name: Skills.findOne(skillId).name} for skillId in skillIds)

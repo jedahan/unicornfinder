@@ -7,11 +7,13 @@
     {{loginButtons}}
     {{> hello}}
     {{> skills}}
-    <h2>All skills</h2>
     {{> allSkills}}
-    <h2>All unicorns</h2>
     {{> allUnicorns}}
+    <div>
+      Code on <a href="http://github.com/jedahan/unicornfinder">github</a>
+    </div>
   </div>
+
 </body>
 
 <template name="hello">
@@ -25,6 +27,7 @@
 </template>
 
 <template name="skills">
+  <h2>My skills</h2>
   <form>
     <input type="text" id="skillText" placeholder="writing,c++"></input>
     <input type="button" id="skillAdd" value="add skill"></input>
@@ -37,6 +40,7 @@
 </template>
 
 <template name="allSkills">
+  <h2>All skills</h2>
   <ul>
     {{#each allSkills}}
     <li>{{name}}</li>
@@ -45,6 +49,7 @@
 </template>
 
 <template name="allUnicorns">
+  <h2>All unicorns</h2>
   <ul>
     {{#each allUnicorns}}
     <li>{{name}}</li>
