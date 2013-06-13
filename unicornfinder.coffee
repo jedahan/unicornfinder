@@ -3,12 +3,20 @@
 
 allSkills = -> Skills.find()
 allUnicorns = -> Unicorns.find()
+username = -> Meteor.user()?.profile?.name
 
 if Meteor.isClient
-  Template.hello.username = username = -> Meteor.user()?.profile?.name
+  Template.hello.username = username
 
   Template.allSkills.allSkills = ->
-    ({name: skill.name} for skill in Skills.find().fetch())
+    skills = []
+    for skill in Skills.find().fetch()
+      name = skill.name
+      unicorns = []
+      for unicorn in Unicorns.find({skillIds: {$in: [skill._id]}}).fetch()
+        unicorns.push unicorn.name
+      skills.push {name, unicorns}
+    skills
 
   Template.allUnicorns.allUnicorns = ->
     ({name: unicorn.name} for unicorn in Unicorns.find().fetch())

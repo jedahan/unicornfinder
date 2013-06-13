@@ -34,7 +34,9 @@
   </form>
   <ul>
     {{#each mySkills}}
-    <li>{{name}}</li>
+    <li class='skill'>
+      {{name}}
+    </li>
     {{/each}}
   </ul>
 </template>
@@ -43,7 +45,7 @@
   <h2>All skills</h2>
   <ul>
     {{#each allSkills}}
-    <li>{{name}}</li>
+    <li class='skill'>{{name}}: {{unicorns}}</li>
     {{/each}}
   </ul>
 </template>
