@@ -7,7 +7,9 @@
     {{loginButtons}}
     {{> hello}}
     {{> skills}}
+    {{> projects}}
     {{> allSkills}}
+    {{> allProjects}}
     {{> allUnicorns}}
     <div>
       Code on <a href="http://github.com/jedahan/unicornfinder">github</a>
@@ -28,10 +30,10 @@
 
 <template name="skills">
   <h2>My skills</h2>
-  <form>
+  <div>
     <input type="text" id="skillText" placeholder="writing,c++"></input>
     <input type="button" id="skillAdd" value="add skill"></input>
-  </form>
+  </div>
   <ul>
     {{#each mySkills}}
     <li class='skill'>
@@ -49,6 +51,31 @@
     {{/each}}
   </ul>
 </template>
+
+<template name="projects">
+  <h2>My projects</h2>
+  <div>
+    <input type="text" id="projectText" placeholder="mashup project"></input>
+    <input type="button" id="projectAdd" value="add project"></input>
+  </div>
+  <ul>
+    {{#each myProjects}}
+    <li class='project'>
+      {{name}}
+    </li>
+    {{/each}}
+  </ul>
+</template>
+
+<template name="allProjects">
+  <h2>All projects</h2>
+  <ul>
+    {{#each allProjects}}
+    <li class='project'>{{name}}: {{unicorns}}</li>
+    {{/each}}
+  </ul>
+</template>
+
 
 <template name="allUnicorns">
   <h2>All unicorns</h2>
